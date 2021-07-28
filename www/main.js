@@ -78,13 +78,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "AppComponent": function() { return /* binding */ AppComponent; }
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! tslib */ 4762);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! tslib */ 4762);
 /* harmony import */ var _raw_loader_app_component_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !raw-loader!./app.component.html */ 1106);
 /* harmony import */ var _app_component_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./app.component.scss */ 3069);
 /* harmony import */ var whatwg_fetch__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! whatwg-fetch */ 9737);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @angular/core */ 7716);
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @angular/router */ 9895);
-/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @ionic/angular */ 476);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @angular/core */ 7716);
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @angular/router */ 9895);
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @ionic/angular */ 476);
 /* harmony import */ var _providers_events_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./providers/events-service */ 5284);
 /* harmony import */ var _ionic_native_status_bar_ngx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ionic-native/status-bar/ngx */ 3494);
 /* harmony import */ var _ionic_native_network_ngx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @ionic-native/network/ngx */ 5592);
@@ -98,7 +98,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _providers_timesheet_service__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./providers/timesheet-service */ 8409);
 /* harmony import */ var _providers_dipreading_service__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./providers/dipreading-service */ 5464);
 /* harmony import */ var _providers_bluetooth_service__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./providers/bluetooth-service */ 7081);
-/* harmony import */ var _ionic_storage_angular__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @ionic/storage-angular */ 1628);
+/* harmony import */ var _providers_sql_service__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./providers/sql-service */ 680);
+/* harmony import */ var _ionic_storage_angular__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @ionic/storage-angular */ 1628);
 
 
 
@@ -123,8 +124,9 @@ window.fetch = whatwg_fetch__WEBPACK_IMPORTED_MODULE_2__.fetch;
 
 
 
+
 var AppComponent = /** @class */ (function () {
-    function AppComponent(platform, toastController, popoverController, plantService, tankService, operatorService, transactionService, timesheetService, dipReadingService, configurationService, bluetoothService, events, splashScreen, network, statusBar, router, storage) {
+    function AppComponent(platform, toastController, popoverController, plantService, tankService, operatorService, transactionService, timesheetService, dipReadingService, configurationService, bluetoothService, events, splashScreen, network, statusBar, sqlService, router, storage) {
         var _this = this;
         this.platform = platform;
         this.toastController = toastController;
@@ -141,6 +143,7 @@ var AppComponent = /** @class */ (function () {
         this.splashScreen = splashScreen;
         this.network = network;
         this.statusBar = statusBar;
+        this.sqlService = sqlService;
         this.router = router;
         this.storage = storage;
         this.events.subscribe('database:sync', function (event) {
@@ -156,17 +159,20 @@ var AppComponent = /** @class */ (function () {
             _this.splashScreen.hide();
             console.log('[FuelITApp] - constructor() :: Detecting platforms:', _this.platform.platforms());
             console.log('[FuelITApp] - constructor() :: Preparing services.');
-            Promise.all([
-                _this.operatorService.init(),
-                _this.plantService.init(),
-                _this.tankService.init(),
-                _this.transactionService.init(),
-                _this.transactionService.initRefills(),
-                _this.timesheetService.init(),
-                _this.dipReadingService.init()
-            ]).then(function (result) {
-                console.log('[FuelITApp] - constructor() :: Services prepared.');
-                _this.sync();
+            _this.sqlService.initDatabase().then(function () {
+                Promise.all([
+                    _this.operatorService.init(),
+                    _this.plantService.init(),
+                    _this.tankService.init(),
+                    _this.transactionService.init(),
+                    _this.transactionService.initRefills(),
+                    _this.timesheetService.init(),
+                    _this.dipReadingService.init()
+                ]).then(function (result) {
+                    console.log('[FuelITApp] - constructor() :: Services prepared.');
+                    _this.sync();
+                });
+            }).catch(function () {
             });
             _this.platform.pause.subscribe(function () {
                 console.log('[FuelITApp] - constructor() :: App paused');
@@ -198,9 +204,9 @@ var AppComponent = /** @class */ (function () {
         console.log('[FuelITApp] - onNetworkDisconnected() :: Network disconnected.');
     };
     AppComponent.prototype.settings = function (event) {
-        return (0,tslib__WEBPACK_IMPORTED_MODULE_16__.__awaiter)(this, void 0, void 0, function () {
+        return (0,tslib__WEBPACK_IMPORTED_MODULE_17__.__awaiter)(this, void 0, void 0, function () {
             var popover, _a, data, role;
-            return (0,tslib__WEBPACK_IMPORTED_MODULE_16__.__generator)(this, function (_b) {
+            return (0,tslib__WEBPACK_IMPORTED_MODULE_17__.__generator)(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, this.popoverController.create({
                             component: _pages_settings_settings_page__WEBPACK_IMPORTED_MODULE_7__.SettingsPage,
@@ -267,9 +273,9 @@ var AppComponent = /** @class */ (function () {
         });
     };
     AppComponent.ctorParameters = function () { return [
-        { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_17__.Platform },
-        { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_17__.ToastController },
-        { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_17__.PopoverController },
+        { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_18__.Platform },
+        { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_18__.ToastController },
+        { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_18__.PopoverController },
         { type: _providers_plant_service__WEBPACK_IMPORTED_MODULE_8__.PlantService },
         { type: _providers_tank_service__WEBPACK_IMPORTED_MODULE_12__.TankService },
         { type: _providers_operator_service__WEBPACK_IMPORTED_MODULE_9__.OperatorService },
@@ -282,11 +288,12 @@ var AppComponent = /** @class */ (function () {
         { type: _ionic_native_splash_screen_ngx__WEBPACK_IMPORTED_MODULE_6__.SplashScreen },
         { type: _ionic_native_network_ngx__WEBPACK_IMPORTED_MODULE_5__.Network },
         { type: _ionic_native_status_bar_ngx__WEBPACK_IMPORTED_MODULE_4__.StatusBar },
-        { type: _angular_router__WEBPACK_IMPORTED_MODULE_18__.Router },
-        { type: _ionic_storage_angular__WEBPACK_IMPORTED_MODULE_19__.Storage }
+        { type: _providers_sql_service__WEBPACK_IMPORTED_MODULE_16__.SqlService },
+        { type: _angular_router__WEBPACK_IMPORTED_MODULE_19__.Router },
+        { type: _ionic_storage_angular__WEBPACK_IMPORTED_MODULE_20__.Storage }
     ]; };
-    AppComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_16__.__decorate)([
-        (0,_angular_core__WEBPACK_IMPORTED_MODULE_20__.Component)({
+    AppComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_17__.__decorate)([
+        (0,_angular_core__WEBPACK_IMPORTED_MODULE_21__.Component)({
             selector: 'app-root',
             template: _raw_loader_app_component_html__WEBPACK_IMPORTED_MODULE_0__.default,
             styles: [_app_component_scss__WEBPACK_IMPORTED_MODULE_1__.default]
@@ -1616,13 +1623,15 @@ __webpack_require__.r(__webpack_exports__);
 var win = window;
 var SqlService = /** @class */ (function () {
     function SqlService(http, configuration, appVersion, platform) {
-        var _this = this;
         this.http = http;
         this.configuration = configuration;
         this.appVersion = appVersion;
         this.platform = platform;
         console.log('[SqlService] - constructor() :: ');
-        this.platform.ready().then(function () {
+    }
+    SqlService.prototype.initDatabase = function () {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
             try {
                 if (_this.platform.is("ios") || _this.platform.is("android") || win.sqlitePlugin) {
                     _this.sqlite = new _ionic_native_sqlite_ngx__WEBPACK_IMPORTED_MODULE_1__.SQLite();
@@ -1639,47 +1648,19 @@ var SqlService = /** @class */ (function () {
                             _this.storage = db;
                         });
                     }).catch(function (err) {
-                        alert(err);
-                        alert("Catch error creating database");
                         console.log(err);
                     });
                 }
                 else {
                     console.log('[SqlService] - constructor() :: Creating WebSQL service');
-                    alert("Creating database win.opendatabase");
                     _this.storage = win.openDatabase(_this.configuration.DATABASE_CONFIG.name, '1.0', 'database', 5 * 1024 * 1024);
                 }
-                /*
-                    if (win.sqlitePlugin) {
-                      console.log('[SqlService] - constructor() :: Creating SQLite service');
-                      this.storage = new SQLite();
-        
-                      Promise.all([
-                        this.appVersion.getAppName(),
-                        this.appVersion.getVersionCode(),
-                        this.appVersion.getVersionNumber(),
-                      ]).then(
-                          result => {
-                            console.log(`[SqlService] - constructor() :: Opening database ${result[0]}.${result[1]}.${result[2]}.db`);
-                            this.storage.openDatabase({
-                                name:       `${result[0]}.${result[1]}.${result[2]}.db`,
-                                location:   'default'
-                            });
-                          }
-                      )
-                    }
-                    else {
-        
-                    }
-                    */
             }
             catch (err) {
-                alert("Error creating database");
-                alert(err);
                 console.log(err);
             }
         });
-    }
+    };
     SqlService.prototype.executeSql = function (statement, params) {
         var _this = this;
         if (params === void 0) { params = []; }
