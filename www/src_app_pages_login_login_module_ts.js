@@ -99,15 +99,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "LoginPage": function() { return /* binding */ LoginPage; }
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! tslib */ 4762);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! tslib */ 4762);
 /* harmony import */ var _raw_loader_login_page_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !raw-loader!./login.page.html */ 1021);
 /* harmony import */ var _login_page_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./login.page.scss */ 8781);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/core */ 7716);
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/forms */ 3679);
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ 9895);
-/* harmony import */ var _providers_operator_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../providers/operator-service */ 1044);
-/* harmony import */ var _providers_configuration_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../providers/configuration-service */ 430);
-
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/core */ 7716);
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/forms */ 3679);
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ 9895);
+/* harmony import */ var _providers_configuration_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../providers/configuration-service */ 430);
 
 
 
@@ -117,14 +115,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var LoginPage = /** @class */ (function () {
-    function LoginPage(builder, configurationService, operatorService, router) {
+    function LoginPage(builder, configurationService, router) {
         this.builder = builder;
         this.configurationService = configurationService;
-        this.operatorService = operatorService;
         this.router = router;
         this.state = 'default';
         this.loginForm = builder.group({
-            'pin_no': ['', _angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.required]
+            'pin_no': ['', _angular_forms__WEBPACK_IMPORTED_MODULE_3__.Validators.required]
         });
         alert("login loaded");
         /*
@@ -139,42 +136,49 @@ var LoginPage = /** @class */ (function () {
     LoginPage.prototype.ngOnInit = function () {
     };
     LoginPage.prototype.onSubmit = function (data) {
-        var _this = this;
         console.log('[LoginPage] - onSubmit() :: Attempt to login ', data);
         this.state = 'working';
-        this.operatorService.findByPinCode(data.pin_no).then(function (operator) {
-            console.log(operator);
-            if (operator.res.rows.length == 1) {
-                console.log('[LoginPage] - onSubmit() :: Found operator for the provided PIN', operator.res.rows.item(0));
-                _this.configurationService.set('operator', operator.res.rows.item(0)).then(function (result) {
-                    console.log('[LoginPage] - onSubmit() :: Current operator set in config to:', operator.res.rows.item(0));
-                    _this.state = 'default';
-                    _this.router.navigateByUrl('/tabs');
-                }, function (failure) {
-                    console.log('[LoginPage] - onSubmit() :: Failed to set the current operator to config:', failure);
-                    _this.state = 'default';
-                    _this.configurationService.remove('operator');
-                });
-            }
-            else {
-                console.log('[LoginPage] - onSubmit() :: Found incorrect number of operators for the provided PIN', operator.res.rows.length);
-                _this.state = 'default';
-                _this.configurationService.remove('operator');
-            }
-        }, function (failure) {
-            console.log('[LoginPage] - onSubmit() :: Failed to find operator for the provided PIN', failure);
-            _this.state = 'default';
-            _this.configurationService.remove('operator');
-        });
+        /*
+                this.operatorService.findByPinCode(data.pin_no).then(
+                    operator => {
+        console.log(operator);
+                        if(operator.res.rows.length == 1) {
+                            console.log('[LoginPage] - onSubmit() :: Found operator for the provided PIN', operator.res.rows.item(0));
+                            this.configurationService.set('operator', operator.res.rows.item(0)).then(
+                                result => {
+                                    console.log('[LoginPage] - onSubmit() :: Current operator set in config to:', operator.res.rows.item(0));
+                                    this.state = 'default';
+                                    this.router.navigateByUrl('/tabs');
+                                },
+                                failure => {
+                                    console.log('[LoginPage] - onSubmit() :: Failed to set the current operator to config:', failure);
+                                    this.state = 'default';
+                                    this.configurationService.remove('operator');
+                                }
+                            );
+                        }
+                        else {
+                            console.log('[LoginPage] - onSubmit() :: Found incorrect number of operators for the provided PIN', operator.res.rows.length);
+                            this.state = 'default';
+                            this.configurationService.remove('operator');
+                        }
+        
+                    },
+                    failure => {
+                        console.log('[LoginPage] - onSubmit() :: Failed to find operator for the provided PIN', failure);
+                        this.state = 'default';
+                        this.configurationService.remove('operator');
+                    });
+                    
+                    */
     };
     LoginPage.ctorParameters = function () { return [
-        { type: _angular_forms__WEBPACK_IMPORTED_MODULE_4__.FormBuilder },
-        { type: _providers_configuration_service__WEBPACK_IMPORTED_MODULE_3__.ConfigurationService },
-        { type: _providers_operator_service__WEBPACK_IMPORTED_MODULE_2__.OperatorService },
-        { type: _angular_router__WEBPACK_IMPORTED_MODULE_5__.Router }
+        { type: _angular_forms__WEBPACK_IMPORTED_MODULE_3__.FormBuilder },
+        { type: _providers_configuration_service__WEBPACK_IMPORTED_MODULE_2__.ConfigurationService },
+        { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__.Router }
     ]; };
-    LoginPage = (0,tslib__WEBPACK_IMPORTED_MODULE_6__.__decorate)([
-        (0,_angular_core__WEBPACK_IMPORTED_MODULE_7__.Component)({
+    LoginPage = (0,tslib__WEBPACK_IMPORTED_MODULE_5__.__decorate)([
+        (0,_angular_core__WEBPACK_IMPORTED_MODULE_6__.Component)({
             selector: 'app-login',
             template: _raw_loader_login_page_html__WEBPACK_IMPORTED_MODULE_0__.default,
             styles: [_login_page_scss__WEBPACK_IMPORTED_MODULE_1__.default]
