@@ -1615,16 +1615,16 @@ __webpack_require__.r(__webpack_exports__);
 
 var win = window;
 var SqlService = /** @class */ (function () {
-    function SqlService(http, configuration, appVersion, sqlite, platform) {
+    function SqlService(http, configuration, appVersion, platform) {
         var _this = this;
         this.http = http;
         this.configuration = configuration;
         this.appVersion = appVersion;
-        this.sqlite = sqlite;
         this.platform = platform;
         console.log('[SqlService] - constructor() :: ');
         try {
             if (this.platform.is("ios") || this.platform.is("android") || win.sqlitePlugin) {
+                this.sqlite = new _ionic_native_sqlite_ngx__WEBPACK_IMPORTED_MODULE_1__.SQLite();
                 Promise.all([
                     this.appVersion.getAppName(),
                     this.appVersion.getVersionCode(),
@@ -1693,7 +1693,6 @@ var SqlService = /** @class */ (function () {
         { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_4__.HttpClient },
         { type: _environments_config__WEBPACK_IMPORTED_MODULE_3__.Config },
         { type: _ionic_native_app_version_ngx__WEBPACK_IMPORTED_MODULE_2__.AppVersion },
-        { type: _ionic_native_sqlite_ngx__WEBPACK_IMPORTED_MODULE_1__.SQLite },
         { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_5__.Platform }
     ]; };
     SqlService = (0,tslib__WEBPACK_IMPORTED_MODULE_6__.__decorate)([
