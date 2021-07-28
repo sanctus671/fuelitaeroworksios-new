@@ -126,7 +126,6 @@ var LoginPage = /** @class */ (function () {
         this.loginForm = builder.group({
             'pin_no': ['', _angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.required]
         });
-        alert("login loaded");
         /*
                 this.configurationService.get('operator').then(operator => {
                     console.log('[LoginPage] constructor() :: ', operator)

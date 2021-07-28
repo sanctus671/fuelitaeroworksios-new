@@ -152,7 +152,6 @@ var AppComponent = /** @class */ (function () {
         this.events.subscribe('settings:open', function (event) {
             _this.settings(event);
         });
-        alert("here");
         this.platform.ready().then(function () {
             _this.splashScreen.hide();
             console.log('[FuelITApp] - constructor() :: Detecting platforms:', _this.platform.platforms());
@@ -1598,13 +1597,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "SqlService": function() { return /* binding */ SqlService; }
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! tslib */ 4762);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! tslib */ 4762);
 /* harmony import */ var rxjs_add_operator_map__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! rxjs/add/operator/map */ 6137);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/core */ 7716);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/core */ 7716);
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common/http */ 1841);
 /* harmony import */ var _ionic_native_sqlite_ngx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ionic-native/sqlite/ngx */ 283);
 /* harmony import */ var _ionic_native_app_version_ngx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ionic-native/app-version/ngx */ 7354);
 /* harmony import */ var _environments_config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../environments/config */ 2193);
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @ionic/angular */ 476);
+
 
 
 
@@ -1614,35 +1615,62 @@ __webpack_require__.r(__webpack_exports__);
 
 var win = window;
 var SqlService = /** @class */ (function () {
-    function SqlService(http, configuration, appVersion) {
+    function SqlService(http, configuration, appVersion, sqlite, platform) {
         var _this = this;
         this.http = http;
         this.configuration = configuration;
         this.appVersion = appVersion;
+        this.sqlite = sqlite;
+        this.platform = platform;
         console.log('[SqlService] - constructor() :: ');
         try {
-            if (win.sqlitePlugin) {
-                console.log('[SqlService] - constructor() :: Creating SQLite service');
-                this.storage = new _ionic_native_sqlite_ngx__WEBPACK_IMPORTED_MODULE_1__.SQLite();
+            if (this.platform.is("ios") || this.platform.is("android") || win.sqlitePlugin) {
                 Promise.all([
                     this.appVersion.getAppName(),
                     this.appVersion.getVersionCode(),
                     this.appVersion.getVersionNumber(),
                 ]).then(function (result) {
                     console.log("[SqlService] - constructor() :: Opening database " + result[0] + "." + result[1] + "." + result[2] + ".db");
-                    _this.storage.openDatabase({
+                    _this.sqlite.create({
                         name: result[0] + "." + result[1] + "." + result[2] + ".db",
                         location: 'default'
+                    }).then(function (db) {
+                        _this.storage = db;
                     });
+                }).catch(function (err) {
+                    console.log(err);
                 });
             }
             else {
                 console.log('[SqlService] - constructor() :: Creating WebSQL service');
                 this.storage = win.openDatabase(this.configuration.DATABASE_CONFIG.name, '1.0', 'database', 5 * 1024 * 1024);
             }
+            /*
+                if (win.sqlitePlugin) {
+                  console.log('[SqlService] - constructor() :: Creating SQLite service');
+                  this.storage = new SQLite();
+        
+                  Promise.all([
+                    this.appVersion.getAppName(),
+                    this.appVersion.getVersionCode(),
+                    this.appVersion.getVersionNumber(),
+                  ]).then(
+                      result => {
+                        console.log(`[SqlService] - constructor() :: Opening database ${result[0]}.${result[1]}.${result[2]}.db`);
+                        this.storage.openDatabase({
+                            name:       `${result[0]}.${result[1]}.${result[2]}.db`,
+                            location:   'default'
+                        });
+                      }
+                  )
+                }
+                else {
+        
+                }
+                */
         }
         catch (err) {
-            alert(err);
+            console.log(err);
         }
     }
     SqlService.prototype.executeSql = function (statement, params) {
@@ -1652,11 +1680,11 @@ var SqlService = /** @class */ (function () {
             try {
                 _this.storage.transaction(function (tx) {
                     tx.executeSql(statement, params, function (tx, res) { return resolve({ tx: tx, res: res }); }, function (tx, err) { return reject({ tx: tx, err: err }); });
-                }, function (err) { return reject({ err: err }); });
+                });
             }
             catch (err) {
                 console.warn('[SqlService] - executeSql() :: Error executing statement', statement);
-                alert(err);
+                console.log(err);
                 reject({ err: err });
             }
         });
@@ -1664,10 +1692,12 @@ var SqlService = /** @class */ (function () {
     SqlService.ctorParameters = function () { return [
         { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_4__.HttpClient },
         { type: _environments_config__WEBPACK_IMPORTED_MODULE_3__.Config },
-        { type: _ionic_native_app_version_ngx__WEBPACK_IMPORTED_MODULE_2__.AppVersion }
+        { type: _ionic_native_app_version_ngx__WEBPACK_IMPORTED_MODULE_2__.AppVersion },
+        { type: _ionic_native_sqlite_ngx__WEBPACK_IMPORTED_MODULE_1__.SQLite },
+        { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_5__.Platform }
     ]; };
-    SqlService = (0,tslib__WEBPACK_IMPORTED_MODULE_5__.__decorate)([
-        (0,_angular_core__WEBPACK_IMPORTED_MODULE_6__.Injectable)({
+    SqlService = (0,tslib__WEBPACK_IMPORTED_MODULE_6__.__decorate)([
+        (0,_angular_core__WEBPACK_IMPORTED_MODULE_7__.Injectable)({
             providedIn: 'root'
         })
     ], SqlService);
