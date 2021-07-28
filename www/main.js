@@ -1638,11 +1638,14 @@ var SqlService = /** @class */ (function () {
                         _this.storage = db;
                     });
                 }).catch(function (err) {
+                    alert(err);
+                    alert("Catch error creating database");
                     console.log(err);
                 });
             }
             else {
                 console.log('[SqlService] - constructor() :: Creating WebSQL service');
+                alert("Creating database win.opendatabase");
                 this.storage = win.openDatabase(this.configuration.DATABASE_CONFIG.name, '1.0', 'database', 5 * 1024 * 1024);
             }
             /*
@@ -1670,6 +1673,8 @@ var SqlService = /** @class */ (function () {
                 */
         }
         catch (err) {
+            alert("Error creating database");
+            alert(err);
             console.log(err);
         }
     }
@@ -1678,13 +1683,17 @@ var SqlService = /** @class */ (function () {
         if (params === void 0) { params = []; }
         return new Promise(function (resolve, reject) {
             try {
-                _this.storage.transaction(function (tx) {
-                    tx.executeSql(statement, params, function (tx, res) { return resolve({ tx: tx, res: res }); }, function (tx, err) { return reject({ tx: tx, err: err }); });
+                _this.storage.executeSql(statement, params)
+                    .then(function (r) {
+                    resolve({ tx: r, res: r.res });
+                }).catch(function (err) {
+                    reject({ tx: {}, err: err });
                 });
             }
             catch (err) {
                 console.warn('[SqlService] - executeSql() :: Error executing statement', statement);
                 console.log(err);
+                alert(err);
                 reject({ err: err });
             }
         });
