@@ -1622,78 +1622,76 @@ var SqlService = /** @class */ (function () {
         this.appVersion = appVersion;
         this.platform = platform;
         console.log('[SqlService] - constructor() :: ');
-        try {
-            if (this.platform.is("ios") || this.platform.is("android") || win.sqlitePlugin) {
-                this.sqlite = new _ionic_native_sqlite_ngx__WEBPACK_IMPORTED_MODULE_1__.SQLite();
-                Promise.all([
-                    this.appVersion.getAppName(),
-                    this.appVersion.getVersionCode(),
-                    this.appVersion.getVersionNumber(),
-                ]).then(function (result) {
-                    console.log("[SqlService] - constructor() :: Opening database " + result[0] + "." + result[1] + "." + result[2] + ".db");
-                    _this.sqlite.create({
-                        name: result[0] + "." + result[1] + "." + result[2] + ".db",
-                        location: 'default'
-                    }).then(function (db) {
-                        _this.storage = db;
-                    });
-                }).catch(function (err) {
-                    alert(err);
-                    alert("Catch error creating database");
-                    console.log(err);
-                });
-            }
-            else {
-                console.log('[SqlService] - constructor() :: Creating WebSQL service');
-                alert("Creating database win.opendatabase");
-                this.storage = win.openDatabase(this.configuration.DATABASE_CONFIG.name, '1.0', 'database', 5 * 1024 * 1024);
-            }
-            /*
-                if (win.sqlitePlugin) {
-                  console.log('[SqlService] - constructor() :: Creating SQLite service');
-                  this.storage = new SQLite();
-        
-                  Promise.all([
-                    this.appVersion.getAppName(),
-                    this.appVersion.getVersionCode(),
-                    this.appVersion.getVersionNumber(),
-                  ]).then(
-                      result => {
-                        console.log(`[SqlService] - constructor() :: Opening database ${result[0]}.${result[1]}.${result[2]}.db`);
-                        this.storage.openDatabase({
-                            name:       `${result[0]}.${result[1]}.${result[2]}.db`,
-                            location:   'default'
+        this.platform.ready().then(function () {
+            try {
+                if (_this.platform.is("ios") || _this.platform.is("android") || win.sqlitePlugin) {
+                    _this.sqlite = new _ionic_native_sqlite_ngx__WEBPACK_IMPORTED_MODULE_1__.SQLite();
+                    Promise.all([
+                        _this.appVersion.getAppName(),
+                        _this.appVersion.getVersionCode(),
+                        _this.appVersion.getVersionNumber(),
+                    ]).then(function (result) {
+                        console.log("[SqlService] - constructor() :: Opening database " + result[0] + "." + result[1] + "." + result[2] + ".db");
+                        _this.sqlite.create({
+                            name: result[0] + "." + result[1] + "." + result[2] + ".db",
+                            location: 'default'
+                        }).then(function (db) {
+                            _this.storage = db;
                         });
-                      }
-                  )
+                    }).catch(function (err) {
+                        alert(err);
+                        alert("Catch error creating database");
+                        console.log(err);
+                    });
                 }
                 else {
-        
+                    console.log('[SqlService] - constructor() :: Creating WebSQL service');
+                    alert("Creating database win.opendatabase");
+                    _this.storage = win.openDatabase(_this.configuration.DATABASE_CONFIG.name, '1.0', 'database', 5 * 1024 * 1024);
                 }
-                */
-        }
-        catch (err) {
-            alert("Error creating database");
-            alert(err);
-            console.log(err);
-        }
+                /*
+                    if (win.sqlitePlugin) {
+                      console.log('[SqlService] - constructor() :: Creating SQLite service');
+                      this.storage = new SQLite();
+        
+                      Promise.all([
+                        this.appVersion.getAppName(),
+                        this.appVersion.getVersionCode(),
+                        this.appVersion.getVersionNumber(),
+                      ]).then(
+                          result => {
+                            console.log(`[SqlService] - constructor() :: Opening database ${result[0]}.${result[1]}.${result[2]}.db`);
+                            this.storage.openDatabase({
+                                name:       `${result[0]}.${result[1]}.${result[2]}.db`,
+                                location:   'default'
+                            });
+                          }
+                      )
+                    }
+                    else {
+        
+                    }
+                    */
+            }
+            catch (err) {
+                alert("Error creating database");
+                alert(err);
+                console.log(err);
+            }
+        });
     }
     SqlService.prototype.executeSql = function (statement, params) {
         var _this = this;
         if (params === void 0) { params = []; }
         return new Promise(function (resolve, reject) {
             try {
-                _this.storage.executeSql(statement, params)
-                    .then(function (r) {
-                    resolve({ tx: r, res: r.res });
-                }).catch(function (err) {
-                    reject({ tx: {}, err: err });
+                _this.storage.transaction(function (tx) {
+                    tx.executeSql(statement, params, function (tx, res) { return resolve({ tx: tx, res: res }); }, function (tx, err) { return reject({ tx: tx, err: err }); });
                 });
             }
             catch (err) {
                 console.warn('[SqlService] - executeSql() :: Error executing statement', statement);
                 console.log(err);
-                alert(err);
                 reject({ err: err });
             }
         });
