@@ -4384,7 +4384,7 @@ module.exports = function (exec, SKIP_CLOSING) {
 
 /***/ }),
 
-/***/ 6644:
+/***/ 547:
 /*!*******************************************************!*\
   !*** ./node_modules/core-js/internals/classof-raw.js ***!
   \*******************************************************/
@@ -4406,7 +4406,7 @@ module.exports = function (it) {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 var TO_STRING_TAG_SUPPORT = __webpack_require__(/*! ../internals/to-string-tag-support */ 2900);
-var classofRaw = __webpack_require__(/*! ../internals/classof-raw */ 6644);
+var classofRaw = __webpack_require__(/*! ../internals/classof-raw */ 547);
 var wellKnownSymbol = __webpack_require__(/*! ../internals/well-known-symbol */ 4563);
 
 var TO_STRING_TAG = wellKnownSymbol('toStringTag');
@@ -5473,7 +5473,7 @@ module.exports = !DESCRIPTORS && !fails(function () {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 var fails = __webpack_require__(/*! ../internals/fails */ 8597);
-var classof = __webpack_require__(/*! ../internals/classof-raw */ 6644);
+var classof = __webpack_require__(/*! ../internals/classof-raw */ 547);
 
 var split = ''.split;
 
@@ -5713,7 +5713,7 @@ module.exports = function (it) {
   \****************************************************/
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var classof = __webpack_require__(/*! ../internals/classof-raw */ 6644);
+var classof = __webpack_require__(/*! ../internals/classof-raw */ 547);
 
 // `IsArray` abstract operation
 // https://tc39.es/ecma262/#sec-isarray

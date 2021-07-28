@@ -118,7 +118,6 @@ __webpack_require__.r(__webpack_exports__);
 
 var LoginPage = /** @class */ (function () {
     function LoginPage(builder, configurationService, operatorService, router) {
-        var _this = this;
         this.builder = builder;
         this.configurationService = configurationService;
         this.operatorService = operatorService;
@@ -127,12 +126,15 @@ var LoginPage = /** @class */ (function () {
         this.loginForm = builder.group({
             'pin_no': ['', _angular_forms__WEBPACK_IMPORTED_MODULE_4__.Validators.required]
         });
-        this.configurationService.get('operator').then(function (operator) {
-            console.log('[LoginPage] constructor() :: ', operator);
-            if (operator != null) {
-                _this.router.navigateByUrl('/tabs');
-            }
-        });
+        alert("login loaded");
+        /*
+                this.configurationService.get('operator').then(operator => {
+                    console.log('[LoginPage] constructor() :: ', operator)
+                    if (operator != null) {
+                        this.router.navigateByUrl('/tabs');
+                    }
+                });
+        */
     }
     LoginPage.prototype.ngOnInit = function () {
     };
