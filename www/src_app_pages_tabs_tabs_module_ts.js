@@ -26,11 +26,11 @@ var routes = [
         children: [
             {
                 path: 'transaction',
-                loadChildren: function () { return Promise.all(/*! import() */[__webpack_require__.e("default-src_app_providers_operator-service_ts-src_app_providers_plant-service_ts-src_app_prov-9e8a1d"), __webpack_require__.e("src_app_pages_transaction_transaction_module_ts")]).then(__webpack_require__.bind(__webpack_require__, /*! ../transaction/transaction.module */ 6924)).then(function (m) { return m.TransactionPageModule; }); }
+                loadChildren: function () { return __webpack_require__.e(/*! import() */ "src_app_pages_transaction_transaction_module_ts").then(__webpack_require__.bind(__webpack_require__, /*! ../transaction/transaction.module */ 6924)).then(function (m) { return m.TransactionPageModule; }); }
             },
             {
                 path: 'tanktotank',
-                loadChildren: function () { return Promise.all(/*! import() */[__webpack_require__.e("default-src_app_providers_operator-service_ts-src_app_providers_plant-service_ts-src_app_prov-9e8a1d"), __webpack_require__.e("src_app_pages_tanktotank_tanktotank_module_ts")]).then(__webpack_require__.bind(__webpack_require__, /*! ../tanktotank/tanktotank.module */ 8919)).then(function (m) { return m.TanktotankPageModule; }); }
+                loadChildren: function () { return __webpack_require__.e(/*! import() */ "src_app_pages_tanktotank_tanktotank_module_ts").then(__webpack_require__.bind(__webpack_require__, /*! ../tanktotank/tanktotank.module */ 8919)).then(function (m) { return m.TanktotankPageModule; }); }
             },
             {
                 path: '',
