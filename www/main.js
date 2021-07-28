@@ -1646,18 +1646,22 @@ var SqlService = /** @class */ (function () {
                             location: 'default'
                         }).then(function (db) {
                             _this.storage = db;
+                            resolve(true);
                         });
                     }).catch(function (err) {
                         console.log(err);
+                        reject(false);
                     });
                 }
                 else {
                     console.log('[SqlService] - constructor() :: Creating WebSQL service');
                     _this.storage = win.openDatabase(_this.configuration.DATABASE_CONFIG.name, '1.0', 'database', 5 * 1024 * 1024);
+                    resolve(true);
                 }
             }
             catch (err) {
                 console.log(err);
+                reject(false);
             }
         });
     };
